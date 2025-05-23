@@ -33,6 +33,8 @@ int main(int argc, char **argv){
   if(argc == 2){
     std::vector<int> data;
     readFile(argv[1],data);
+
+    std::cout << "int quantity: " << data.size() << std::endl;
     
     std::cout << "radix sorting..." << std::endl;
     auto tin = std::chrono::high_resolution_clock::now();
