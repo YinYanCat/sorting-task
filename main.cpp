@@ -31,19 +31,21 @@ bool checkSorted(std::vector<int> &data){
 
 int main(int argc, char **argv){
   if(argc == 2){
-    std::vector<int> data;;
+    std::vector<int> data;
     readFile(argv[1],data);
     
-    std::cout << std::endl << std::endl << "radix sorting..." << std::endl;
+    std::cout << "radix sorting..." << std::endl;
     auto tin = std::chrono::high_resolution_clock::now();
     radixSort(data);
     auto tout = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << std::endl << std::endl << "time:" << duration.count() << " ms"<< std::endl;
+    std::cout << "time:" << duration.count() << " ms"<< std::endl;
     std::cout << "sorted: " << checkSorted(data) << std::endl;
 
 
+    data.clear();
+    readFile(argv[1],data);
     
     std::cout << std::endl << std::endl << "heap sorting..." << std::endl;
     tin = std::chrono::high_resolution_clock::now();
@@ -51,17 +53,20 @@ int main(int argc, char **argv){
     tout = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << std::endl << std::endl << "time:" << duration.count() << " ms"<< std::endl;
+    std::cout << "time:" << duration.count() << " ms"<< std::endl;
     std::cout << "sorted: " << checkSorted(data) << std::endl;
 
 
+    data.clear();
+    readFile(argv[1],data);
+    
     std::cout << std::endl << std::endl << "insertion sorting..." << std::endl;
     tin = std::chrono::high_resolution_clock::now();
     insertionSort(data);
     tout = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << std::endl << std::endl << "time:" << duration.count() << " ms"<< std::endl;
+    std::cout << "time:" << duration.count() << " ms"<< std::endl;
     std::cout << "sorted: " << checkSorted(data) << std::endl;
     
     return 0;
