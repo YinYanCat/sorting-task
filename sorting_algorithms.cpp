@@ -96,5 +96,75 @@ void heapSort(std::vector<int>& data){
   }
 }
 
-void mergeSort(std::vector<int>& data){
+int partition(std::vector<int>& data, int low, int high) {
+  int pivot_index = low+std::rand()%(high-low+1);
+  std::swap(data[pivot_index], data[high]);
+  int pivot =data[high];
+  int i = low - 1;
+  for (int j = low; j < high; j++) {
+    if (data[j] < pivot) {
+      i++;
+      std::swap(data[i], data[j]);
+    }
+  }
+  std::swap(data[i + 1], data[high]);  
+  return i + 1;
+}
+
+void quickSort(std::vector<int>& data, int low, int high) {
+    if (low < high) {
+        int part_index = partition(data, low, high);
+        quickSort(data, low, part_index - 1);
+        quickSort(data, part_index + 1, high);
+    }
+}
+void merge(std::vector<int>& data, int left, int mid, int right){
+  int size1 = mid - left + 1;
+  int size2 = right - mid;
+  
+  std::vector<int> L(size1), R(size2);
+  for (int i = 0; i < size1; i++)
+    L[i] = data[left + i];
+  for (int j = 0; j < size2; j++)
+    R[j] = data[mid + 1 + j];
+  
+  int i = 0;
+  int j = 0;
+  int k = left;
+  while (i < size1 && j < size2) {
+    if (L[i] <= R[j]) {
+      data[k] = L[i];
+      i++;
+    }
+    else {
+      data[k] = R[j];
+      j++;
+    }
+    k++;
+  }
+  while (i < size1) {
+    data[k] = L[i];
+    i++;
+    k++;
+  }
+  
+  while (j < size2) {
+    data[k] = R[j];
+    j++;
+    k++;
+    }
+}
+
+void mergeSort(std::vector<int>& data, int left, int right){
+  if (left >= right)
+    return;
+  
+  int mid = left + (right - left) / 2;
+  mergeSort(data, left, mid);
+  mergeSort(data, mid + 1, right);
+  merge(data, left, mid, right);
+}
+
+void stdSort(std::vector<int>& data){
+  std::sort(data.begin(), data.end());
 }

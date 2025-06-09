@@ -1,14 +1,16 @@
-void countingSort(std::vector<int> &data, int start, int end, int mask){
+void countingSort(std::vector<int> &data, int start, int end, int shift){
   std::vector<int> output(end-start);
-  std::vector<int> count(2,0);
+  std::vector<int> count(256,0);
   for(int i=start;i<end;i++){
-    int bit = (data[i]&mask) ? 1 : 0;
-    count[bit]++;
+    int byte = (data[i] >> shift) & 255;
+    count[byte]++;
   }
-  count[1]+=count[0];
+  for(int i=1;i<256;i++){
+    count[i] += count[i-1];
+  }
   for(int i=end-1;i>=start;i--){
-    int bit = (data[i]&mask) ? 1 : 0;
-    output[--count[bit]] = data[i];
+    int byte = (data[i]>>shift) & 255;
+    output[--count[byte]] = data[i];
   }
   for(int i=start;i<end;i++){
     data[i]=output[i-start];
@@ -25,16 +27,20 @@ void par_radixSort(std::vector<int> &data, int start, int end){
       max=data[i];
     }
   }
-  for(int mask = 1;mask<=max;mask<<=1){
-    countingSort(data,start,end,mask);
+  for(int shift=0; shift<32; shift+=8){
+    countingSort(data,start,end,shift);
   }
 }
 
-void radixSort(std::vector<int> &data){
+void radixSort(std::vector<int> &data, bool is_parallel){
   int size = data.size();
+  if(!is_parallel){
+    par_radixSort(data,0,size);
+    return;
+  }
   int max_threads = std::thread::hardware_concurrency();
   int optimal_threads = std::min(max_threads,size);
-  int min_chunk_size = 128;
+  int min_chunk_size = 127;
   if(optimal_threads == 0){
     optimal_threads = 2;
   }
