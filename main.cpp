@@ -30,90 +30,114 @@ bool checkSorted(std::vector<int> &data){
 }
 
 int main(int argc, char **argv){
+  
   if(argc == 2){
     std::vector<int> original;
     std::vector<int> data;
     readFile(argv[1],original);
-    data = original;
 
-    std::cout << "int quantity: " << data.size() << std::endl;
-    
-    std::cout << "std in-place merge parallelized 8-bit bucket radix sorting..." << std::endl;
+    std::ofstream rfile;
+    rfile.open("1MB_Rand.csv");
+
     auto tin = std::chrono::high_resolution_clock::now();
-    radixSort(data,true);
     auto tout = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
-    
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
 
-    data = original;
+    std::cout << "int quantity: " << original.size() << std::endl;
+
+    std::cout << "std in-place merge parallelized 16-bit bucket radix sorting..." << std::endl;
+    rfile << "Bucket radix sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
+      
+      tin = std::chrono::high_resolution_clock::now();
+      radixSort(data,true);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
+      rfile << duration.count() << ",";
+    }
+
     std::cout << std::endl << std::endl << "radix sorting single thread..." << std::endl;
-    tin = std::chrono::high_resolution_clock::now();
-    radixSort(data,false);
-    tout = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
+    rfile << "\nRadix sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
+      
+      tin = std::chrono::high_resolution_clock::now();
+      radixSort(data,false);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
+      rfile << duration.count() << ",";
+    }
 
-
-    data = original;
-    
     std::cout << std::endl << std::endl << "std sorting..." << std::endl;
-    tin = std::chrono::high_resolution_clock::now();
-    stdSort(data);
-    tout = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
+    rfile << "\nSTD sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
+      
+      tin = std::chrono::high_resolution_clock::now();
+      stdSort(data);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
+      rfile << duration.count() << ",";
+    }
 
-    std::copy(original.begin(),original.end(), data.begin());
-    
     std::cout << std::endl << std::endl << "heap sorting..." << std::endl;
-    tin = std::chrono::high_resolution_clock::now();
-    heapSort(data);
-    tout = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
-    
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
+    rfile << "\nHeap sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
 
-    data = original;
+      tin = std::chrono::high_resolution_clock::now();
+      heapSort(data);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
+      rfile  << duration.count() << ",";
+    }
+
     std::cout << std::endl << std::endl << "merge sorting..." << std::endl;
-    tin = std::chrono::high_resolution_clock::now();
-    mergeSort(data, 0, data.size()-1);
-    tout = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
+    rfile << "\nMerge sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
+      
+      tin = std::chrono::high_resolution_clock::now();
+      mergeSort(data, 0, data.size()-1);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
-    
-    data = original;
+      rfile << duration.count() << ",";
+    }
 
     std::srand(std::time(nullptr));
     std::cout << std::endl << std::endl << "quick sorting..." << std::endl;
-    tin = std::chrono::high_resolution_clock::now();
-    quickSort(data, 0, data.size()-1);
-    tout = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
+    rfile << "\nQuick sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
+      
+      tin = std::chrono::high_resolution_clock::now();
+      quickSort(data, 0, data.size()-1);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
     
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
-    
-    data = original;
-    
+      rfile << duration.count() << ",";
+    }
+
     std::cout << std::endl << std::endl << "insertion sorting..." << std::endl;
-    tin = std::chrono::high_resolution_clock::now();
-    insertionSort(data);
-    tout = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
+    rfile << "\nInsertion sortig:,";
+    for(int iter=0; iter<20; iter++) {
+      data = original;
     
-    std::cout << "time:" << duration.count() << " ms"<< std::endl;
-    std::cout << "sorted: " << checkSorted(data) << std::endl;
+      tin = std::chrono::high_resolution_clock::now();
+      insertionSort(data);
+      tout = std::chrono::high_resolution_clock::now();
+      duration = std::chrono::duration_cast<std::chrono::milliseconds>(tout-tin);
+    
+      rfile << duration.count() << ",";
+    }
+
+    rfile.close();
     
     return 0;
   }

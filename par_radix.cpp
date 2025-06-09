@@ -1,15 +1,15 @@
 void countingSort(std::vector<int> &data, int start, int end, int shift){
   std::vector<int> output(end-start);
-  std::vector<int> count(256,0);
+  std::vector<int> count(65536,0);
   for(int i=start;i<end;i++){
-    int byte = (data[i] >> shift) & 255;
+    int byte = (data[i] >> shift) & 65535;
     count[byte]++;
   }
-  for(int i=1;i<256;i++){
+  for(int i=1;i<65536;i++){
     count[i] += count[i-1];
   }
   for(int i=end-1;i>=start;i--){
-    int byte = (data[i]>>shift) & 255;
+    int byte = (data[i]>>shift) & 65535;
     output[--count[byte]] = data[i];
   }
   for(int i=start;i<end;i++){
@@ -27,7 +27,7 @@ void par_radixSort(std::vector<int> &data, int start, int end){
       max=data[i];
     }
   }
-  for(int shift=0; shift<32; shift+=8){
+  for(int shift=0; shift<32; shift+=16){
     countingSort(data,start,end,shift);
   }
 }

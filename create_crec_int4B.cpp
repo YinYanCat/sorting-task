@@ -1,24 +1,27 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 int main() {
     int size = 0;
     std::cout << "array size x with x = ";
     std::cin >> size;
 
-    std::ofstream file("decrec_"+std::to_string(size)+"size.bin", std::ios::binary);
+
+    std::ofstream file("crec_"+std::to_string(size)+"size.bin", std::ios::binary);
     if (!file) {
       std::cerr << "Error al abrir el archivo" << std::endl;
       return 1;
     }
     
-    for (int i = size - 1; i >= 0; --i) { 
+    for (int i = 0; i<size; i++) {  // De 0 hasta size
       file.write(reinterpret_cast<const char*>(&i), sizeof(int));
     }
     
     file.close();
-    std::cout << "Archivo generado con " << size << " enteros decrecientes." << std::endl;
-    
+    std::cout << "Archivo generado con tamaño " << size*sizeof(int) << " enteros crecientes." << std::endl;
+
+
     return 0;
 }
 
