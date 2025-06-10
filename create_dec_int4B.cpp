@@ -6,7 +6,7 @@ int main() {
     std::cout << "array size x with x = ";
     std::cin >> size;
 
-    std::ofstream file("decrec_"+std::to_string(size)+"size.bin", std::ios::binary);
+    std::ofstream file("decrec_"+std::to_string(size*sizeof(int)/1000000)+"MB.bin", std::ios::binary);
     if (!file) {
       std::cerr << "Error al abrir el archivo" << std::endl;
       return 1;
@@ -17,7 +17,7 @@ int main() {
     }
     
     file.close();
-    std::cout << "Archivo generado con " << size << " enteros decrecientes." << std::endl;
+    std::cout << "Archivo generado con " << size * sizeof(int) << "bytes, enteros decrecientes." << std::endl;
     
     return 0;
 }

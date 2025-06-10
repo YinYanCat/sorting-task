@@ -8,7 +8,7 @@ int main() {
     std::cin >> size;
 
 
-    std::ofstream file("crec_"+std::to_string(size)+"size.bin", std::ios::binary);
+    std::ofstream file("crec_"+std::to_string(size*sizeof(int)/1000000)+"MB.bin", std::ios::binary);
     if (!file) {
       std::cerr << "Error al abrir el archivo" << std::endl;
       return 1;
@@ -19,7 +19,7 @@ int main() {
     }
     
     file.close();
-    std::cout << "Archivo generado con tamaño " << size*sizeof(int) << " enteros crecientes." << std::endl;
+    std::cout << "Archivo generado con tamaño " << size*sizeof(int) << "bytes, enteros crecientes." << std::endl;
 
 
     return 0;
